@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #12121a);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      margin-bottom: 15px;
+      background: rgba(255,255,255,0.05);
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #6366f1;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      min-height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Futuristic AI Loader */
+    .ai-spinner {
+      width: 30px;
+      height: 30px;
+      border: 4px solid rgba(79, 70, 229, 0.2);
+      border-top: 4px solid #4f46e5;
+      border-radius: 50%;
+      animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
+      box-shadow: 0 0 5px #4f46e5, 0 0 10px #4f46e5, 0 0 20px #4f46e5;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px #4f46e5, 0 0 10px #4f46e5, 0 0 20px #4f46e5; }
+      100% { box-shadow: 0 0 10px #818cf8, 0 0 20px #818cf8, 0 0 30px #818cf8; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>AI Calculator 🤖</h2>
+
+  <input type="text" id="input" placeholder="Ask something like '25% of 400'">
+
+  <button onclick="calculate()">Calculate</button>
+
+  <p id="result"></p>
+</div>
+
+<script>
+  const inputField = document.getElementById("input");
+
+  // Enter key support
+  inputField.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+      calculate();
+    }
+  });
+
+  function calculate() {
+    let input = inputField.value.toLowerCase();
+    const resultEl = document.getElementById("result");
+
+    // Show futuristic loader
+    resultEl.innerHTML = '<div class="ai-spinner"></div>';
+
+    setTimeout(() => {
+      try {
+        // Smart replacements
+        input = input.replace(/percent of/g, "/100 *");
+        input = input.replace(/% of/g, "/100 *");
+        input = input.replace(/plus/g, "+");
+        input = input.replace(/minus/g, "-");
+        input = input.replace(/into|times|x/g, "*");
+        input = input.replace(/divided by/g, "/");
+
+        input = input.replace(/half of/g, "0.5 *");
+        input = input.replace(/quarter of/g, "0.25 *");
+
+        input = input.replace(/square root of (\d+)/g, "Math.sqrt($1)");
+        input = input.replace(/(\d+) to the power of (\d+)/g, "Math.pow($1,$2)");
+
+        input = input.replace(/what is|calculate|find/g, "");
+
+        const result = eval(input);
+        resultEl.innerText = result;
+      } catch (error) {
+        resultEl.innerText = "I didn't understand that 🤖";
+      }
+    }, 500); // simulate 0.5s loading
+  }
+</script>
+</body>
+</html>
